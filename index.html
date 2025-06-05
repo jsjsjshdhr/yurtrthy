@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Key Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #keyContainer {
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #key {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="keyContainer">
+        <h1>Current Key</h1>
+        <div id="key">Generating...</div>
+    </div>
+
+    <script>
+        function generateKey() {
+            // Generate a random 8-character key
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let key = '';
+            for (let i = 0; i < 8; i++) {
+                key += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return key;
+        }
+
+        function updateKey() {
+            const keyElement = document.getElementById('key');
+            keyElement.textContent = generateKey();
+        }
+
+        // Update key immediately and then every 60 seconds
+        updateKey();
+        setInterval(updateKey, 60000);
+
+        // Expose key via a simple API endpoint simulation
+        window.getCurrentKey = function() {
+            return document.getElementById('key').textContent;
+        };
+    </script>
+</body>
+</html>
