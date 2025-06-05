@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Key Generator</title>
+    <title>Global Key Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -30,34 +30,25 @@
 </head>
 <body>
     <div id="keyContainer">
-        <h1>Current Key</h1>
-        <div id="key">Generating...</div>
+        <h1>Current Global Key</h1>
+        <div id="key">Loading...</div>
     </div>
 
     <script>
-        function generateKey() {
-            // Generate a random 8-character key
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let key = '';
-            for (let i = 0; i < 8; i++) {
-                key += characters.charAt(Math.floor(Math.random() * characters.length));
+        async function fetchKey() {
+            try {
+                const response = await fetch('/api/key');
+                const data = await response.json();
+                document.getElementById('key').textContent = data.key;
+            } catch (error) {
+                document.getElementById('key').textContent = 'Error fetching key';
+                console.error('Error:', error);
             }
-            return key;
         }
 
-        function updateKey() {
-            const keyElement = document.getElementById('key');
-            keyElement.textContent = generateKey();
-        }
-
-        // Update key immediately and then every 60 seconds
-        updateKey();
-        setInterval(updateKey, 60000);
-
-        // Expose key via a simple API endpoint simulation
-        window.getCurrentKey = function() {
-            return document.getElementById('key').textContent;
-        };
+        // Fetch key immediately and every 60 seconds
+        fetchKey();
+        setInterval(fetchKey, 60000);
     </script>
 </body>
 </html>
